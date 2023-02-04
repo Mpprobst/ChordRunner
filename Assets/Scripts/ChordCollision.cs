@@ -10,6 +10,7 @@ public class ChordCollision : MonoBehaviour
     public int Root;
     public string ChordName;
     private MusicPlatformGroup _musicPlatformGroup;
+    
 
     // Start is called before the first frame update
     void Start()
@@ -30,6 +31,12 @@ public class ChordCollision : MonoBehaviour
 
         foreach(NoteData noteData in NoteDatas)
             _musicPlatformGroup.PlayNote(noteData.Note);
+
+        
+        if (collision.gameObject.transform.position.y > NoteDatas[Root].transform.position.y - .5 && collision.gameObject.transform.position.y < NoteDatas[Root].transform.position.y + .5)
+        {
+
+        }
     }
 
     /// <summary>

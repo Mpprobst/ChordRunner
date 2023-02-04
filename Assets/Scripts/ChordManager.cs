@@ -19,6 +19,11 @@ public class ChordManager : MonoBehaviour
         // TODO: Move bars across at set tempo, might be for a different class
     }
 
+    private void FixedUpdate()
+    {
+        
+    }
+
     /// <summary>
     /// Takes in values to generate the chords of the song
     /// </summary>
@@ -46,6 +51,7 @@ public class ChordManager : MonoBehaviour
             chordObject.transform.localPosition += Vector3.right * _beatDistance * _currentBeat;
 
             chordObjects.Add(chordObject);
+          
         }
     }
 
@@ -53,6 +59,7 @@ public class ChordManager : MonoBehaviour
     /// Creates a group of notes TODO: Have special functionality for the root note and offset notes that are next to eachother
     /// </summary>
     /// <param name="chordData">The values for the chord</param>
+    /// <param name="chordData">The tuple values for the chord</param>
     /// <param name="root">Which note is the root note</param>
     /// <param name="chordName">Name of the chord</param>
     /// <returns>The parent gameobject that contains the notes</returns>

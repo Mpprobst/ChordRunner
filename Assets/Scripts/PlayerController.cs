@@ -13,12 +13,14 @@ public class PlayerController : MonoBehaviour
     public float healAmount = 20f;
 
     private float health;
+    private int comboCount;
     private CircleCollider2D playerCollider;
     // Start is called before the first frame update
     void Start()
     {
         playerCollider = gameObject.GetComponent<CircleCollider2D>();
         health = baseHealth;
+        comboCount = 0;
         currentNote = "C4";
         MoveHeight(0);
     }
@@ -55,7 +57,7 @@ public class PlayerController : MonoBehaviour
     {
         int row = MusicPlatformGroup.Instance.GetRowIdx(currentNote) + direction;
         float height = MusicPlatformGroup.Instance.GetRowHeight(row);
-        transform.position = new Vector3(0, height, 0);
+        transform.position = new Vector3(0, height, 0); // TODO: move player to desired space on screen.
         currentNote = MusicPlatformGroup.Instance.GetRowName(row);
     }
 
