@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class NotePlayer : MonoBehaviour
 {
+    public int midiVal;
     public int noteOffset; // distance from middle c
     private AudioSource source;
 
@@ -30,8 +31,9 @@ public class NotePlayer : MonoBehaviour
         
     }
 
-    public void PlayNote()
+    public void PlayNote(bool isSharp)
     {
+
         source.Play();
     }
 }
