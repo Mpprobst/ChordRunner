@@ -6,33 +6,23 @@ public class NotePlayer : MonoBehaviour
 {
     public int midiVal;
     private AudioSource source;
+    private float basePitch;
 
     // Start is called before the first frame update
     void Start()
     {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
-    
-    public void Initialize(float pitch)
-    {
         source = GetComponent<AudioSource>();
-
-    }
-
-    private void OnTriggerEnter2D(Collider2D collision)
-    {
-        
+        basePitch = MusicManager.NoteToPitch(midiVal);
+        source.pitch = basePitch;
     }
 
     public void PlayNote(bool isSharp)
     {
-
+        if (isSharp)
+        {
+            source.pitch = MusicManager.NoteToPitch(midiVal+1);
+        }
         source.Play();
+        source.pitch = basePitch;
     }
 }
