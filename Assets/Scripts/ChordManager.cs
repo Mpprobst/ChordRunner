@@ -7,8 +7,11 @@ public class ChordManager : MonoBehaviour
 {
     // this class takes an input of the notes and creates the chord objects for the player to navigate
 
+    [SerializeField] private MusicManager _musicManager;
     [SerializeField] private GameObject _chordPrefab;
     [SerializeField] private GameObject _notePrefab;
+    [SerializeField] private float _beatDistance = 100f;
+    private float _currentBeat;
     private MusicPlatformGroup _musicPlatformGroup;
 
     void Start()
@@ -25,30 +28,46 @@ public class ChordManager : MonoBehaviour
     /// Takes in values to generate the chords of the song
     /// </summary>
     /// <param name="chordList">The data received from Michael</param>
-    public void CreateSong(List<List<int>> chordList)
+    public void CreateSong(List<MusicManager.BeatData> chordList)
     {
+        _currentBeat = 0;
         List<GameObject> chordObjects = new List<GameObject>();
         // create a chord for each value in the list
-        foreach (List<int> chordData in chordList)
+        foreach (MusicManager.BeatData chordData in chordList)
         {
-            chordObjects.Add(CreateChord(chordData, 0)); // input index of root note
-            // TODO: Set position of chord based on where it will be in the song
+            _currentBeat++;
+            if (!chordData.played)
+                continue;
+
+            int rootIndex = 0;
+
+            foreach (NotePlayer notePlayer in _musicPlatformGroup.rows)
+                if (notePlayer.gameObject.name[0] == char.ToUpper(chordData.chord[0]))
+                    rootIndex = chordData.chordNotes.IndexOf(notePlayer.midiVal + (char.IsLower(chordData.chord[0]) ? 1 : 0));
+
+            GameObject chordObject = CreateChord(chordData.chordNotes, rootIndex, chordData.chord);
+
+            chordObject.transform.localPosition += Vector3.right * _beatDistance * _currentBeat;
+
+            chordObjects.Add(chordObject);
         }
     }
 
     /// <summary>
     /// Creates a group of notes TODO: Have special functionality for the root note and offset notes that are next to eachother
     /// </summary>
-    /// <param name="chordData">The tuple values for the chord</param>
+    /// <param name="chordData">The values for the chord</param>
     /// <param name="root">Which note is the root note</param>
+    /// <param name="chordName">Name of the chord</param>
     /// <returns>The parent gameobject that contains the notes</returns>
-    public GameObject CreateChord(List<int> chordData, int root)
+    public GameObject CreateChord(List<int> chordData, int root, string chordName)
     {
         GameObject chordObject = Instantiate(_chordPrefab, transform);
 
         ChordCollision chord = chordObject.GetComponent<ChordCollision>();
 
         chord.Root = root;
+        chord.ChordName = chordName;
 
         for(int i=0; i<chordData.Count; i++)
         {

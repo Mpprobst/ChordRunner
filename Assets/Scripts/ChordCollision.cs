@@ -8,6 +8,7 @@ public class ChordCollision : MonoBehaviour
 {
     public List<NoteData> NoteDatas;
     public int Root;
+    public string ChordName;
     private MusicPlatformGroup _musicPlatformGroup;
 
     // Start is called before the first frame update

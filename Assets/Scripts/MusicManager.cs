@@ -10,7 +10,7 @@ using System.IO;
 /// </summary>
 public class MusicManager : MonoBehaviour
 {
-
+    [SerializeField] private ChordManager _chordManager;
     public struct BeatData
     {
         public bool played;
@@ -21,6 +21,8 @@ public class MusicManager : MonoBehaviour
 
     // TODO: only look ahead 1 measure and populate those notes. At end of song repeat, and consider doing a key change
     public static float MID_C_FREQ = 261.64f;
+    public static int MID_C_MIDI = 60;
+    public List<BeatData> BeatDatas;
 
     TextAsset encodedSong;
 
@@ -28,13 +30,11 @@ public class MusicManager : MonoBehaviour
     void Start()
     {
         MusicPlatformGroup notes = MusicPlatformGroup.Instance;
-        foreach (var note in notes.rows)
-        {
-            float pitch = NoteToPitch(note.noteOffset);
-            note.Initialize(pitch);
-        }
         encodedSong = Resources.Load<TextAsset>("SongFiles/encoded_song_19");
-        ParseSong(encodedSong);
+        BeatDatas = ParseSong(encodedSong);
+
+        if(_chordManager != null)
+            _chordManager.CreateSong(BeatDatas);
     }
 
     // Update is called once per frame
@@ -48,9 +48,9 @@ public class MusicManager : MonoBehaviour
     /// </summary>
     /// <param name="noteOffset"> number of notes away from C4</param>
     /// <returns></returns>
-    public float NoteToPitch(int noteOffset)
+    public static float NoteToPitch(int note)
     {
-        float freq = MID_C_FREQ * Mathf.Pow(2, noteOffset / 12f); // equation to determine frequency of note based on its distance from middle c
+        float freq = MID_C_FREQ * Mathf.Pow(2, (MID_C_MIDI - note) / 12f); // equation to determine frequency of note based on its distance from middle c
         float pitch = freq / MID_C_FREQ;
         return pitch;
     }
@@ -87,10 +87,13 @@ public class MusicManager : MonoBehaviour
             string chordString = line.Substring(arrayStart, arrayEnd-arrayStart);
             string[] chordArray = chordString.Split(',');
             List<int> chord = new List<int>();
-            for (int i = 0; i < chordArray.Length; i++)
+            if (arrayEnd - arrayStart >= 2)
             {
-                int val = int.Parse(chordArray[i].Trim());
-                chord.Add(val);
+                for (int i = 0; i < chordArray.Length; i++)
+                {
+                    int val = int.Parse(chordArray[i].Trim());
+                    chord.Add(val);
+                }
             }
             beat.chordNotes = chord;
 
@@ -105,7 +108,6 @@ public class MusicManager : MonoBehaviour
                 chordArray = chordString.Split(',');
                 for (int i = 0; i < chordArray.Length; i++)
                 {
-                    Debug.Log(chordArray[i].Trim());
                     int val = int.Parse(chordArray[i].Trim());
                     otherNotes.Add(val);
                 }
@@ -113,7 +115,6 @@ public class MusicManager : MonoBehaviour
 
             beat.otherNotes = otherNotes;
             songData.Add(beat);
-
         }
         return songData;
     }
