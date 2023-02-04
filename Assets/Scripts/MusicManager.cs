@@ -10,7 +10,6 @@ using System.IO;
 /// </summary>
 public class MusicManager : MonoBehaviour
 {
-
     public struct BeatData
     {
         public bool played;

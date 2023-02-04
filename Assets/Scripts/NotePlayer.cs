@@ -5,7 +5,6 @@ using UnityEngine;
 public class NotePlayer : MonoBehaviour
 {
     public int midiVal;
-    public int noteOffset; // distance from middle c
     private AudioSource source;
 
     // Start is called before the first frame update
