@@ -42,4 +42,9 @@ public class ChordCollision : MonoBehaviour
             if(i != Root)
                 NoteDatas[i].SetDissolveAmount(dissolveAmount);
     }
+
+    public int GetRootMidiValue()
+    {
+        return NoteDatas[Root].Note;
+    }
 }
