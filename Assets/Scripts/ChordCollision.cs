@@ -8,6 +8,7 @@ public class ChordCollision : MonoBehaviour
 {
     public List<NoteData> NoteDatas;
     public int Root;
+    public string ChordName;
     private MusicPlatformGroup _musicPlatformGroup;
 
     // Start is called before the first frame update
@@ -40,5 +41,10 @@ public class ChordCollision : MonoBehaviour
         for(int i=0; i<NoteDatas.Count; i++)
             if(i != Root)
                 NoteDatas[i].SetDissolveAmount(dissolveAmount);
+    }
+
+    public int GetRootMidiValue()
+    {
+        return NoteDatas[Root].Note;
     }
 }

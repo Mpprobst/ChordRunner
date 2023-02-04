@@ -10,6 +10,7 @@ using System.IO;
 /// </summary>
 public class MusicManager : MonoBehaviour
 {
+    [SerializeField] private ChordManager _chordManager;
     public struct BeatData
     {
         public bool played;
@@ -21,6 +22,7 @@ public class MusicManager : MonoBehaviour
     // TODO: only look ahead 1 measure and populate those notes. At end of song repeat, and consider doing a key change
     public static float MID_C_FREQ = 261.64f;
     public static int MID_C_MIDI = 60;
+    public List<BeatData> BeatDatas;
 
     TextAsset encodedSong;
 
@@ -29,7 +31,10 @@ public class MusicManager : MonoBehaviour
     {
         MusicPlatformGroup notes = MusicPlatformGroup.Instance;
         encodedSong = Resources.Load<TextAsset>("SongFiles/encoded_song_19");
-        ParseSong(encodedSong);
+        BeatDatas = ParseSong(encodedSong);
+
+        if(_chordManager != null)
+            _chordManager.CreateSong(BeatDatas);
     }
 
     // Update is called once per frame
