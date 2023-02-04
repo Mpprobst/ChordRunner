@@ -7,7 +7,7 @@ public class MusicPlatformGroup : MonoBehaviour
     public static MusicPlatformGroup Instance { get { return _instance; } }
     public static MusicPlatformGroup _instance;
     // 49 = C4 = 6 so, we subrtact 43 from midi value
-    public Transform[] rows;
+    public NotePlayer[] rows;
 
     private void Awake()
     {
@@ -37,7 +37,7 @@ public class MusicPlatformGroup : MonoBehaviour
     public float GetRowHeight(int row)
     {
         row = Mathf.Clamp(row, 0, rows.Length-1);
-        return rows[row].position.y;
+        return rows[row].transform.position.y;
     }
 
     public int GetRowIdx(string note)
