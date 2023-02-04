@@ -1599,7 +1599,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   noteTag: rightNote
   baseHealth: 100
-  healthDrainPerSec: 10
+  healthDrainPerSec: 100
   healAmount: 20
 --- !u!4 &1896511713
 Transform:

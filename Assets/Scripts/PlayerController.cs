@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class PlayerController : MonoBehaviour
 {
@@ -41,7 +42,7 @@ public class PlayerController : MonoBehaviour
         if (health <= 0)
         {
             Debug.Log("Player has Died");
-            //TODO: define some logic for death
+            die();
         }
     }
 
@@ -74,5 +75,10 @@ public class PlayerController : MonoBehaviour
     private void addHealth(float amount)
     {
         health += amount;
+    }
+
+    private void die()
+    {
+        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
     }
 }
