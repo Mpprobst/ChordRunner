@@ -27,10 +27,8 @@ public class ChordCollision : MonoBehaviour
         if (_musicPlatformGroup == null)
             _musicPlatformGroup = MusicPlatformGroup.Instance;
 
-        /*foreach(value in _musicPlatformGroup.noteDataThing)
-        {
-            value.playNote();
-        }*/
+        foreach(NoteData noteData in NoteDatas)
+            _musicPlatformGroup.PlayNote(noteData.Note);
     }
 
     /// <summary>

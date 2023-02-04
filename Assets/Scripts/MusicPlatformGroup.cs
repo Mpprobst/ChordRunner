@@ -46,4 +46,26 @@ public class MusicPlatformGroup : MonoBehaviour
         row = Mathf.Clamp(row, 0, rows.Length - 1);
         return rows[row].name;
     }
+
+    public void PlayNote(int midiValue)
+    {
+        NotePlayer previousNote = null;
+        for (int i=0; i<rows.Length; i++)
+        {
+            NotePlayer note = rows[i];
+            if(note.midiVal == midiValue)
+            {
+                note.PlayNote(false);
+                return;
+            }
+
+            if(note.midiVal > midiValue && previousNote.midiVal < midiValue)
+            {
+                previousNote.PlayNote(true);
+                return;
+            }
+
+            previousNote = note;
+        }
+    }
 }
