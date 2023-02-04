@@ -1577,6 +1577,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1896511713}
   - component: {fileID: 1896511712}
+  - component: {fileID: 1896511714}
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
@@ -1596,6 +1597,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c8a4b37107cb9484e96048a2c8dbe5c4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  noteTag: rightNote
+  baseHealth: 100
+  healthDrainPerSec: 10
+  healAmount: 20
 --- !u!4 &1896511713
 Transform:
   m_ObjectHideFlags: 0
@@ -1611,3 +1616,19 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!58 &1896511714
+CircleCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1896511711}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0, y: 0}
+  serializedVersion: 2
+  m_Radius: 0.5
