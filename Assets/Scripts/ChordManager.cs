@@ -14,11 +14,6 @@ public class ChordManager : MonoBehaviour
     private float _currentBeat;
     private MusicPlatformGroup _musicPlatformGroup;
 
-    void Start()
-    {
-        _musicPlatformGroup = MusicPlatformGroup.Instance;
-    }
-
     void Update()
     {
         // TODO: Move bars across at set tempo, might be for a different class
@@ -41,6 +36,7 @@ public class ChordManager : MonoBehaviour
 
             int rootIndex = 0;
 
+            _musicPlatformGroup = MusicPlatformGroup.Instance;
             foreach (NotePlayer notePlayer in _musicPlatformGroup.rows)
                 if (notePlayer.gameObject.name[0] == char.ToUpper(chordData.chord[0]))
                     rootIndex = chordData.chordNotes.IndexOf(notePlayer.midiVal + (char.IsLower(chordData.chord[0]) ? 1 : 0));
