@@ -25,9 +25,9 @@ public class ChordManager : MonoBehaviour
     {
         // 32nd note length = 7.5f/bpm/2f
         noteLength =  15f / _musicManager.bpm;  
-        noteMovementSpeed =  (1.66f) *_beatDistance / noteLength;
+        //noteMovementSpeed =  (1.66f) *_beatDistance / noteLength;
         lastNoteTime = -1000;
-        noteMovementSpeed = _beatDistance * 8 * _musicManager.bpm / 60f;
+        noteMovementSpeed = _beatDistance * 4 * _musicManager.bpm / 60f;
         
         // note should travel its full distance in 32nd note
     }
