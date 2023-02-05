@@ -218,7 +218,7 @@ AudioSource:
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 8300000, guid: 8ed8ef563a29b8e40b0462a246fee774, type: 3}
-  m_PlayOnAwake: 1
+  m_PlayOnAwake: 0
   m_Volume: 1
   m_Pitch: 1
   Loop: 0
@@ -411,7 +411,7 @@ AudioSource:
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 8300000, guid: 8ed8ef563a29b8e40b0462a246fee774, type: 3}
-  m_PlayOnAwake: 1
+  m_PlayOnAwake: 0
   m_Volume: 1
   m_Pitch: 1
   Loop: 0
@@ -604,7 +604,7 @@ AudioSource:
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 8300000, guid: 8ed8ef563a29b8e40b0462a246fee774, type: 3}
-  m_PlayOnAwake: 1
+  m_PlayOnAwake: 0
   m_Volume: 1
   m_Pitch: 1
   Loop: 0
@@ -731,6 +731,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 76900a812214bbd4d84d09bce823053f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _chordManager: {fileID: 941745985}
 --- !u!4 &315548091
 Transform:
   m_ObjectHideFlags: 0
@@ -840,7 +841,7 @@ AudioSource:
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 8300000, guid: 8ed8ef563a29b8e40b0462a246fee774, type: 3}
-  m_PlayOnAwake: 1
+  m_PlayOnAwake: 0
   m_Volume: 1
   m_Pitch: 1
   Loop: 0
@@ -1325,8 +1326,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c34b9e6ff1f61de4ea52fb649d7f807c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _musicManager: {fileID: 315548090}
   _chordPrefab: {fileID: 2569654234689971967, guid: 17bcc3ec6ebd9cf46b6fb5e1b5e18de6, type: 3}
-  _notePrefab: {fileID: 0}
+  _notePrefab: {fileID: 3428732564166910429, guid: 6b026f718575bd24fab9efbb41937ce1, type: 3}
+  _beatDistance: 1
+  noteMovementSpeed: 3
 --- !u!1 &965252151
 GameObject:
   m_ObjectHideFlags: 0
@@ -1422,7 +1426,7 @@ AudioSource:
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 8300000, guid: 8ed8ef563a29b8e40b0462a246fee774, type: 3}
-  m_PlayOnAwake: 1
+  m_PlayOnAwake: 0
   m_Volume: 1
   m_Pitch: 1
   Loop: 0
@@ -1615,7 +1619,7 @@ AudioSource:
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 8300000, guid: 8ed8ef563a29b8e40b0462a246fee774, type: 3}
-  m_PlayOnAwake: 1
+  m_PlayOnAwake: 0
   m_Volume: 1
   m_Pitch: 1
   Loop: 0
@@ -1901,7 +1905,7 @@ AudioSource:
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 8300000, guid: 8ed8ef563a29b8e40b0462a246fee774, type: 3}
-  m_PlayOnAwake: 1
+  m_PlayOnAwake: 0
   m_Volume: 1
   m_Pitch: 1
   Loop: 0
@@ -2239,7 +2243,7 @@ AudioSource:
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 8300000, guid: 8ed8ef563a29b8e40b0462a246fee774, type: 3}
-  m_PlayOnAwake: 1
+  m_PlayOnAwake: 0
   m_Volume: 1
   m_Pitch: 1
   Loop: 0
@@ -2432,7 +2436,7 @@ AudioSource:
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 8300000, guid: 8ed8ef563a29b8e40b0462a246fee774, type: 3}
-  m_PlayOnAwake: 1
+  m_PlayOnAwake: 0
   m_Volume: 1
   m_Pitch: 1
   Loop: 0
@@ -2626,7 +2630,7 @@ AudioSource:
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 8300000, guid: 8ed8ef563a29b8e40b0462a246fee774, type: 3}
-  m_PlayOnAwake: 1
+  m_PlayOnAwake: 0
   m_Volume: 1
   m_Pitch: 1
   Loop: 0
@@ -2819,7 +2823,7 @@ AudioSource:
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 8300000, guid: 8ed8ef563a29b8e40b0462a246fee774, type: 3}
-  m_PlayOnAwake: 1
+  m_PlayOnAwake: 0
   m_Volume: 1
   m_Pitch: 1
   Loop: 0
@@ -3010,6 +3014,7 @@ GameObject:
   - component: {fileID: 1896511713}
   - component: {fileID: 1896511712}
   - component: {fileID: 1896511714}
+  - component: {fileID: 1896511715}
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
@@ -3031,7 +3036,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   noteTag: rightNote
   baseHealth: 100
-  healthDrainPerSec: 10
+  healthDrainPerSec: 0
   healAmount: 20
 --- !u!4 &1896511713
 Transform:
@@ -3075,6 +3080,27 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 1, y: 20}
   m_EdgeRadius: 0
+--- !u!50 &1896511715
+Rigidbody2D:
+  serializedVersion: 4
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1896511711}
+  m_BodyType: 0
+  m_Simulated: 1
+  m_UseFullKinematicContacts: 0
+  m_UseAutoMass: 0
+  m_Mass: 1
+  m_LinearDrag: 0
+  m_AngularDrag: 0.05
+  m_GravityScale: 0
+  m_Material: {fileID: 0}
+  m_Interpolate: 0
+  m_SleepingMode: 1
+  m_CollisionDetection: 1
+  m_Constraints: 0
 --- !u!1 &1955989592
 GameObject:
   m_ObjectHideFlags: 0

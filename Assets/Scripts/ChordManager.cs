@@ -13,6 +13,7 @@ public class ChordManager : MonoBehaviour
     [SerializeField] private float _beatDistance = 100f;
     private float _currentBeat;
     private MusicPlatformGroup _musicPlatformGroup;
+    public float noteMovementSpeed = 1;
 
     void Update()
     {
@@ -21,7 +22,7 @@ public class ChordManager : MonoBehaviour
 
     private void FixedUpdate()
     {
-        
+        gameObject.transform.position = new Vector2(gameObject.transform.position.x - noteMovementSpeed * Time.deltaTime, gameObject.transform.position.y);
     }
 
     /// <summary>
@@ -44,7 +45,21 @@ public class ChordManager : MonoBehaviour
             _musicPlatformGroup = MusicPlatformGroup.Instance;
             foreach (NotePlayer notePlayer in _musicPlatformGroup.rows)
                 if (notePlayer.gameObject.name[0] == char.ToUpper(chordData.chord[0]))
-                    rootIndex = chordData.chordNotes.IndexOf(notePlayer.midiVal + (char.IsLower(chordData.chord[0]) ? 1 : 0));
+                {
+                    rootIndex = notePlayer.midiVal + (char.IsLower(chordData.chord[0]) ? 1 : 0);
+                    
+                    //normalizing midi value to fall within a one octave range
+                    while(rootIndex < 50)
+                    {
+                        rootIndex += 12;
+                    }
+                    while(rootIndex > 67)
+                    {
+                        rootIndex -= 12;
+                    }
+                    rootIndex = chordData.chordNotes.IndexOf(rootIndex);
+                }
+
 
             GameObject chordObject = CreateChord(chordData.chordNotes, rootIndex, chordData.chord);
 
@@ -68,6 +83,7 @@ public class ChordManager : MonoBehaviour
         GameObject chordObject = Instantiate(_chordPrefab, transform);
 
         ChordCollision chord = chordObject.GetComponent<ChordCollision>();
+        chord.NoteDatas = new List<NoteData>();
 
         chord.Root = root;
         chord.ChordName = chordName;

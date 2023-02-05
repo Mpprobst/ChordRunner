@@ -15,7 +15,7 @@ public class ChordCollision : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        NoteDatas = new List<NoteData>();
+        
     }
 
     // Update is called once per frame
@@ -26,6 +26,7 @@ public class ChordCollision : MonoBehaviour
 
     void OnTriggerEnter2D(Collider2D collision)
     {
+        Debug.Log("collided with " + collision.gameObject.name);
         if (_musicPlatformGroup == null)
             _musicPlatformGroup = MusicPlatformGroup.Instance;
 
@@ -33,9 +34,9 @@ public class ChordCollision : MonoBehaviour
             _musicPlatformGroup.PlayNote(noteData.Note);
 
         
-        if (collision.gameObject.transform.position.y > NoteDatas[Root].transform.position.y - .5 && collision.gameObject.transform.position.y < NoteDatas[Root].transform.position.y + .5)
+        if (collision.gameObject.transform.position.y == NoteDatas[Root].transform.position.y)
         {
-
+            Debug.Log("hit player");
         }
     }
 

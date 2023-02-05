@@ -57,7 +57,7 @@ public class PlayerController : MonoBehaviour
     {
         int row = MusicPlatformGroup.Instance.GetRowIdx(currentNote) + direction;
         float height = MusicPlatformGroup.Instance.GetRowHeight(row);
-        transform.position = new Vector3(0, height, 0); // TODO: move player to desired space on screen.
+        transform.position = new Vector3(-9, height, 0); // TODO: move player to desired space on screen.
         currentNote = MusicPlatformGroup.Instance.GetRowName(row);
     }
 
