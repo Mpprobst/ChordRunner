@@ -10,7 +10,9 @@ public class ChordManager : MonoBehaviour
     [SerializeField] private MusicManager _musicManager;
     [SerializeField] private GameObject _chordPrefab;
     [SerializeField] private GameObject _notePrefab, _invisibleNote;
+    [SerializeField] private GameObject _barPrefab;
     [SerializeField] private float _beatDistance = 0.25f;
+    [SerializeField] private float _repeats = 4f;
     private float _currentBeat;
     private MusicPlatformGroup _musicPlatformGroup;
     private float noteMovementSpeed = 1;
@@ -24,7 +26,7 @@ public class ChordManager : MonoBehaviour
         noteLength =  15f / _musicManager.bpm;  
         noteMovementSpeed =  (1.66f) *_beatDistance / noteLength;
         lastNoteTime = -1000;
-        noteMovementSpeed = _beatDistance * 4 * _musicManager.bpm / 60f;
+        noteMovementSpeed = _beatDistance * 8 * _musicManager.bpm / 60f;
         
         // note should travel its full distance in 32nd note
     }
@@ -55,65 +57,69 @@ public class ChordManager : MonoBehaviour
     {
         List<int> lastChord = new List<int>();
         List<GameObject> chordObjects = new List<GameObject>();
-        // create a chord for each value in the list
-        for (int i = 0; i < chordList.Count; i++)
+
+        for (int r = 0; r < _repeats; r++)
         {
-            if (_currentBeat % 4 == 1)
-                Instantiate(_notePrefab, new Vector3(_beatDistance * _currentBeat, 4, -2), Quaternion.identity, this.transform);            
-
-            _currentBeat += 1;
-            MusicManager.BeatData chordData = chordList[i];
-
-            Debug.Log(chordData.played);
-            
-            if (!chordData.played)
-                continue;
-
-            int rootIndex = 0;
-
-            _musicPlatformGroup = MusicPlatformGroup.Instance;
-            foreach (NotePlayer notePlayer in _musicPlatformGroup.rows)
+            // create a chord for each value in the list
+            for (int i = 0; i < chordList.Count; i++)
             {
-                if (notePlayer.gameObject.name[0] == char.ToUpper(chordData.chord[0]))
-                {
-                    int val = notePlayer.midiVal + (char.IsLower(chordData.chord[0]) ? 1 : 0);
-                    //normalizing midi value to fall within a one octave range
-                    while (val < 50)
-                    {
-                        val += 12;
-                    }
-                    while (val > 67)
-                    {
-                        val -= 12;
-                    }
-                    rootIndex = chordData.chordNotes.IndexOf(val);
-                    if (rootIndex == -1)
-                        Debug.Log("root not found");
-                }
-            }
+                if (_currentBeat % 16 == 1)
+                    Instantiate(_barPrefab, new Vector3(_beatDistance * _currentBeat, 0, -2), Quaternion.identity, this.transform);
 
-            bool newChord = false;
+                _currentBeat += 1;
+                MusicManager.BeatData chordData = chordList[i];
 
-            if (lastChord.Count == 3 && chordData.chordNotes.Count == 3)
-            {
-                for (int c = 0; c < chordData.chordNotes.Count; c++)
+                Debug.Log(chordData.played);
+
+                if (!chordData.played)
+                    continue;
+
+                int rootIndex = 0;
+
+                _musicPlatformGroup = MusicPlatformGroup.Instance;
+                foreach (NotePlayer notePlayer in _musicPlatformGroup.rows)
                 {
-                    if (chordData.chordNotes[c] != lastChord[c])
+                    if (notePlayer.gameObject.name[0] == char.ToUpper(chordData.chord[0]))
                     {
-                        newChord = true;
-                        break;
+                        int val = notePlayer.midiVal + (char.IsLower(chordData.chord[0]) ? 1 : 0);
+                        //normalizing midi value to fall within a one octave range
+                        while (val < 50)
+                        {
+                            val += 12;
+                        }
+                        while (val > 67)
+                        {
+                            val -= 12;
+                        }
+                        rootIndex = chordData.chordNotes.IndexOf(val);
+                        if (rootIndex == -1)
+                            Debug.Log("root not found");
                     }
                 }
+
+                bool newChord = false;
+
+                if (lastChord.Count == 3 && chordData.chordNotes.Count == 3)
+                {
+                    for (int c = 0; c < chordData.chordNotes.Count; c++)
+                    {
+                        if (chordData.chordNotes[c] != lastChord[c])
+                        {
+                            newChord = true;
+                            break;
+                        }
+                    }
+                }
+
+                if (lastChord.Count < 3)
+                    newChord = true;
+                if (newChord)
+                    lastChord = chordData.chordNotes;
+
+                GameObject chordObject = CreateChord(chordData.chordNotes, chordData.otherNotes, rootIndex, chordData.chord, ((i + 1) % 2 == 0 || i == 0));
+                chordObject.transform.localPosition = new Vector3(_beatDistance * _currentBeat, chordObject.transform.position.y, -2);
+                chordObjects.Add(chordObject);
             }
-
-            if (lastChord.Count < 3)
-                newChord = true;
-            if (newChord)
-                lastChord = chordData.chordNotes;
-
-            GameObject chordObject = CreateChord(chordData.chordNotes, chordData.otherNotes, rootIndex, chordData.chord, ((i + 1) % 2 == 0 || i == 0));
-            chordObject.transform.localPosition = new Vector3(_beatDistance * _currentBeat, chordObject.transform.position.y, -2);
-            chordObjects.Add(chordObject);
         }
     }
 

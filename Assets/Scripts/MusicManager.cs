@@ -129,6 +129,16 @@ public class MusicManager : MonoBehaviour
                 for (int i = 0; i < chordArray.Length; i++)
                 {
                     int val = int.Parse(chordArray[i].Trim());
+
+                    //normalizing midi value to fall within a one octave range
+                    while (val < 50)
+                    {
+                        val += 12;
+                    }
+                    while (val > 67)
+                    {
+                        val -= 12;
+                    }
                     otherNotes.Add(val);
                 }
             }
