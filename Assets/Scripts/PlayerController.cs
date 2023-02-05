@@ -15,6 +15,8 @@ public class PlayerController : MonoBehaviour
     private float health;
     private int comboCount;
     private CircleCollider2D playerCollider;
+    private Rigidbody2D rb;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -22,13 +24,13 @@ public class PlayerController : MonoBehaviour
         health = baseHealth;
         comboCount = 0;
         currentNote = "C4";
+        rb = GetComponent<Rigidbody2D>();
         MoveHeight(0);
     }
 
     // Update is called once per frame
     void Update()
     {
-        // TODO: clean up the code :)
         if (Input.GetKeyDown(KeyCode.W) || Input.GetKeyDown(KeyCode.UpArrow))
         {
             // move up
@@ -57,7 +59,8 @@ public class PlayerController : MonoBehaviour
     {
         int row = MusicPlatformGroup.Instance.GetRowIdx(currentNote) + direction;
         float height = MusicPlatformGroup.Instance.GetRowHeight(row);
-        transform.position = new Vector3(-9, height, 0); // TODO: move player to desired space on screen.
+        rb.MovePosition(new Vector3(-9, height, 0));
+        //transform.position = new Vector3(-9, height, 0); // TODO: move player to desired space on screen.
         currentNote = MusicPlatformGroup.Instance.GetRowName(row);
     }
 

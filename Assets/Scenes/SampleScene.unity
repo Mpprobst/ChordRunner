@@ -1329,7 +1329,7 @@ MonoBehaviour:
   _musicManager: {fileID: 315548090}
   _chordPrefab: {fileID: 2569654234689971967, guid: 17bcc3ec6ebd9cf46b6fb5e1b5e18de6, type: 3}
   _notePrefab: {fileID: 3428732564166910429, guid: 6b026f718575bd24fab9efbb41937ce1, type: 3}
-  _beatDistance: 1
+  _beatDistance: 0.2
   noteMovementSpeed: 3
 --- !u!1 &965252151
 GameObject:

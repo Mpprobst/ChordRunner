@@ -33,8 +33,13 @@ public class ChordCollision : MonoBehaviour
         foreach(NoteData noteData in NoteDatas)
             _musicPlatformGroup.PlayNote(noteData.Note);
 
-        
-        if (collision.gameObject.transform.position.y == NoteDatas[Root].transform.position.y)
+        float rootPos = -10;
+        float playerPos = collision.gameObject.transform.position.y;
+        if (Root >= 0)
+            rootPos = NoteDatas[Root].transform.position.y;
+        else
+            Debug.Log("Root is out of range");
+        if (Mathf.Abs(rootPos - playerPos) < Mathf.Epsilon)
         {
             Debug.Log("hit player");
         }

@@ -46,18 +46,19 @@ public class ChordManager : MonoBehaviour
             foreach (NotePlayer notePlayer in _musicPlatformGroup.rows)
                 if (notePlayer.gameObject.name[0] == char.ToUpper(chordData.chord[0]))
                 {
-                    rootIndex = notePlayer.midiVal + (char.IsLower(chordData.chord[0]) ? 1 : 0);
-                    
+                    int val = notePlayer.midiVal + (char.IsLower(chordData.chord[0]) ? 1 : 0);
                     //normalizing midi value to fall within a one octave range
-                    while(rootIndex < 50)
+                    while (val < 50)
                     {
-                        rootIndex += 12;
+                        val += 12;
                     }
-                    while(rootIndex > 67)
+                    while (val > 67)
                     {
-                        rootIndex -= 12;
+                        val -= 12;
                     }
-                    rootIndex = chordData.chordNotes.IndexOf(rootIndex);
+                    rootIndex = chordData.chordNotes.IndexOf(val);
+                    if (rootIndex == -1)
+                        Debug.Log("root not found");
                 }
 
 
