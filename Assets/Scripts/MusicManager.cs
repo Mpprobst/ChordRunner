@@ -86,7 +86,6 @@ public class MusicManager : MonoBehaviour
             //if (line.Length < 16) continue;
             BeatData beat = new BeatData();
             beat.played = line[0] - '0' == 1;
-            Debug.Log(beat.played);
 
             beat.chord = line.Substring(2, 2);
 
