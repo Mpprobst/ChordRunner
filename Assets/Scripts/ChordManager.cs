@@ -13,6 +13,7 @@ public class ChordManager : MonoBehaviour
     [SerializeField] private GameObject _barPrefab;
     [SerializeField] private float _beatDistance = 0.25f;
     [SerializeField] private float _repeats = 4f;
+    private List<ChordCollision> chordObjects;
     private float _currentBeat;
     private MusicPlatformGroup _musicPlatformGroup;
     private float noteMovementSpeed = 1;
@@ -34,6 +35,10 @@ public class ChordManager : MonoBehaviour
     private void Update()
     {
         transform.localPosition -= new Vector3(Time.deltaTime * noteMovementSpeed, 0);
+        foreach(ChordCollision chord in chordObjects)
+        {
+            chord.SetDissolveValue(1);
+        }
     }
 
     private void FixedUpdate()
@@ -56,7 +61,7 @@ public class ChordManager : MonoBehaviour
     public void CreateSong(List<MusicManager.BeatData> chordList)
     {
         List<int> lastChord = new List<int>();
-        List<GameObject> chordObjects = new List<GameObject>();
+        chordObjects = new List<ChordCollision>();
 
         for (int r = 0; r < _repeats; r++)
         {
@@ -116,7 +121,7 @@ public class ChordManager : MonoBehaviour
                 if (newChord)
                     lastChord = chordData.chordNotes;
 
-                GameObject chordObject = CreateChord(chordData.chordNotes, chordData.otherNotes, rootIndex, chordData.chord, ((i + 1) % 2 == 0 || i == 0));
+                ChordCollision chordObject = CreateChord(chordData.chordNotes, chordData.otherNotes, rootIndex, chordData.chord, ((i + 1) % 2 == 0 || i == 0));
                 chordObject.transform.localPosition = new Vector3(_beatDistance * _currentBeat, chordObject.transform.position.y, -2);
                 chordObjects.Add(chordObject);
             }
@@ -131,7 +136,7 @@ public class ChordManager : MonoBehaviour
     /// <param name="root">Which note is the root note</param>
     /// <param name="chordName">Name of the chord</param>
     /// <returns>The parent gameobject that contains the notes</returns>
-    public GameObject CreateChord(List<int> chordData, List<int> otherNotes, int root, string chordName, bool visible)
+    public ChordCollision CreateChord(List<int> chordData, List<int> otherNotes, int root, string chordName, bool visible)
     {
         GameObject chordObject = Instantiate(_chordPrefab, transform);
 
@@ -160,6 +165,6 @@ public class ChordManager : MonoBehaviour
         }
 
 
-        return chordObject;
+        return chord;
     }
 }
