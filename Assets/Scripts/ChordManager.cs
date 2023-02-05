@@ -11,22 +11,18 @@ public class ChordManager : MonoBehaviour
     [SerializeField] private GameObject _chordPrefab;
     [SerializeField] private GameObject _notePrefab, _invisibleNote;
     [SerializeField] private float _beatDistance = 0.25f;
-    private float _currentBeat;
+
+    private float beatsCreated;
     private MusicPlatformGroup _musicPlatformGroup;
     private float noteMovementSpeed = 1;
     private float noteLength;
-    private float lastNoteTime;
     float x_start, x_goal;
+
 
     private void Start()
     {
-        // 32nd note length = 7.5f/bpm/2f
         noteLength =  15f / _musicManager.bpm;  
-        noteMovementSpeed =  (1.66f) *_beatDistance / noteLength;
-        lastNoteTime = -1000;
-        noteMovementSpeed = _musicManager.bpm / 60f / _beatDistance;
-        
-        // note should travel its full distance in 32nd note
+        noteMovementSpeed = _beatDistance / noteLength;
     }
 
     private void Update()
@@ -36,15 +32,7 @@ public class ChordManager : MonoBehaviour
 
     private void FixedUpdate()
     {
-        //gameObject.transform.position = new Vector2(gameObject.transform.position.x - noteMovementSpeed * Time.deltaTime, gameObject.transform.position.y);
-        /*if (Time.time - lastNoteTime > noteLength)
-        {
-            lastNoteTime = Time.time;
-            x_start = transform.position.x;
-            x_goal = x_start - _beatDistance;
-        }
-        float x = Mathf.Lerp(x_start, x_goal, (Time.time - lastNoteTime) / noteLength);
-        transform.position = new Vector3(x, transform.position.y);*/
+
     }
 
     /// <summary>
@@ -58,7 +46,7 @@ public class ChordManager : MonoBehaviour
         // create a chord for each value in the list
         for (int i = 0; i < chordList.Count; i++)
         {
-            _currentBeat += 1;
+            beatsCreated += 1;
             MusicManager.BeatData chordData = chordList[i];
             if (!chordData.played)
                 continue;
@@ -106,7 +94,7 @@ public class ChordManager : MonoBehaviour
                 lastChord = chordData.chordNotes;
 
             GameObject chordObject = chordObject = CreateChord(chordData.chordNotes, chordData.otherNotes, rootIndex, chordData.chord, ((i + 1) % 2 == 0 || i == 0));
-            chordObject.transform.localPosition += Vector3.right * _beatDistance * _currentBeat;
+            chordObject.transform.localPosition += Vector3.right * _beatDistance * beatsCreated;
             chordObjects.Add(chordObject);
         }
     }
