@@ -2,7 +2,6 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-[RequireComponent(typeof(SpriteRenderer))]
 public class NoteData : MonoBehaviour
 {
     public int Note;
@@ -10,11 +9,13 @@ public class NoteData : MonoBehaviour
 
     void Start()
     {
-        _material = GetComponent<SpriteRenderer>().material;
+        if (GetComponent<SpriteRenderer>())
+            _material = GetComponent<SpriteRenderer>().material;
     }
 
     public void SetDissolveAmount(float amount)
     {
-        _material.SetFloat("_DissolveAmount", amount);
+        if (_material)
+            _material.SetFloat("_DissolveAmount", amount);
     }
 }

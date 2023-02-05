@@ -11,6 +11,8 @@ using System.IO;
 public class MusicManager : MonoBehaviour
 {
     [SerializeField] private ChordManager _chordManager;
+    public float bpm = 100;
+    // bps = bpm/60f. 
     public struct BeatData
     {
         public bool played;
@@ -30,7 +32,7 @@ public class MusicManager : MonoBehaviour
     void Start()
     {
         MusicPlatformGroup notes = MusicPlatformGroup.Instance;
-        encodedSong = Resources.Load<TextAsset>("SongFiles/encoded_song_19");
+        encodedSong = Resources.Load<TextAsset>("SongFiles/encoded_song_16");
         BeatDatas = ParseSong(encodedSong);
 
         if(_chordManager != null)

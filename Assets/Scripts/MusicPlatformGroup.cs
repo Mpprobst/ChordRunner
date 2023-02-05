@@ -9,6 +9,8 @@ public class MusicPlatformGroup : MonoBehaviour
     NotePlayer previousNote = null;
 
     public NotePlayer[] rows;
+    public AudioSource[] extraSources;
+    private bool[] sourcesUsed;
 
     private void Awake()
     {
@@ -16,6 +18,8 @@ public class MusicPlatformGroup : MonoBehaviour
             _instance = this;
         else
             Destroy(gameObject);
+
+        sourcesUsed = new bool[extraSources.Length];
     }
 
     /// <summary>
@@ -71,5 +75,23 @@ public class MusicPlatformGroup : MonoBehaviour
 
             previousNote = note;
         }
+
+        // note not found. improvise
+        for (int i = 0; i < extraSources.Length; i++)
+        {
+            if (!sourcesUsed[i])
+            {
+                extraSources[i].pitch = MusicManager.NoteToPitch(midiValue);
+                extraSources[i].Play();
+                sourcesUsed[i] = true;
+                Invoke("ClearExtraSources", extraSources[i].clip.length);
+            }
+        }
+    }
+
+    private void ClearExtraSources()
+    {
+        for (int i = 0; i < sourcesUsed.Length; i++)
+            sourcesUsed[i] = false;
     }
 }

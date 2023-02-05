@@ -33,6 +33,7 @@ public class ChordCollision : MonoBehaviour
         foreach(NoteData noteData in NoteDatas)
             _musicPlatformGroup.PlayNote(noteData.Note);
 
+
         float rootPos = -10;
         float playerPos = collision.gameObject.transform.position.y;
         if (Root >= 0)
