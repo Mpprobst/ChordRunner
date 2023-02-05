@@ -21,24 +21,30 @@ public class ChordManager : MonoBehaviour
     private void Start()
     {
         // 32nd note length = 7.5f/bpm/2f
-        noteLength = 7.5f / _musicManager.bpm;
-        noteMovementSpeed = _beatDistance / noteLength * 1.5f;
+        noteLength =  15f / _musicManager.bpm;  
+        noteMovementSpeed =  (1.66f) *_beatDistance / noteLength;
         lastNoteTime = -1000;
+        noteMovementSpeed = _musicManager.bpm / 60f / _beatDistance;
         
         // note should travel its full distance in 32nd note
+    }
+
+    private void Update()
+    {
+        transform.position -= new Vector3(Time.deltaTime * noteMovementSpeed, 0);
     }
 
     private void FixedUpdate()
     {
         //gameObject.transform.position = new Vector2(gameObject.transform.position.x - noteMovementSpeed * Time.deltaTime, gameObject.transform.position.y);
-        if (Time.time - lastNoteTime > noteLength)
+        /*if (Time.time - lastNoteTime > noteLength)
         {
             lastNoteTime = Time.time;
             x_start = transform.position.x;
             x_goal = x_start - _beatDistance;
         }
         float x = Mathf.Lerp(x_start, x_goal, (Time.time - lastNoteTime) / noteLength);
-        transform.position = new Vector3(x, transform.position.y);
+        transform.position = new Vector3(x, transform.position.y);*/
     }
 
     /// <summary>
@@ -47,11 +53,12 @@ public class ChordManager : MonoBehaviour
     /// <param name="chordList">The data received from Michael</param>
     public void CreateSong(List<MusicManager.BeatData> chordList)
     {
-        _currentBeat = 0;
+        List<int> lastChord = new List<int>();
         List<GameObject> chordObjects = new List<GameObject>();
         // create a chord for each value in the list
         for (int i = 0; i < chordList.Count; i++)
         {
+            _currentBeat += 1;
             MusicManager.BeatData chordData = chordList[i];
             if (!chordData.played)
                 continue;
@@ -79,8 +86,27 @@ public class ChordManager : MonoBehaviour
                 }
             }
 
-            GameObject chordObject = chordObject = CreateChord(chordData.chordNotes, chordData.otherNotes, rootIndex, chordData.chord);//, ((i + 1) % 4 == 0 || i == 0));
-            chordObject.transform.localPosition += Vector3.right * _beatDistance * i;
+            bool newChord = false;
+
+            if (lastChord.Count == 3 && chordData.chordNotes.Count == 3)
+            {
+                for (int c = 0; c < chordData.chordNotes.Count; c++)
+                {
+                    if (chordData.chordNotes[c] != lastChord[c])
+                    {
+                        newChord = true;
+                        break;
+                    }
+                }
+            }
+
+            if (lastChord.Count < 3)
+                newChord = true;
+            if (newChord)
+                lastChord = chordData.chordNotes;
+
+            GameObject chordObject = chordObject = CreateChord(chordData.chordNotes, chordData.otherNotes, rootIndex, chordData.chord, ((i + 1) % 2 == 0 || i == 0));
+            chordObject.transform.localPosition += Vector3.right * _beatDistance * _currentBeat;
             chordObjects.Add(chordObject);
         }
     }
@@ -93,7 +119,7 @@ public class ChordManager : MonoBehaviour
     /// <param name="root">Which note is the root note</param>
     /// <param name="chordName">Name of the chord</param>
     /// <returns>The parent gameobject that contains the notes</returns>
-    public GameObject CreateChord(List<int> chordData, List<int> otherNotes, int root, string chordName)
+    public GameObject CreateChord(List<int> chordData, List<int> otherNotes, int root, string chordName, bool visible)
     {
         GameObject chordObject = Instantiate(_chordPrefab, transform);
 
@@ -103,13 +129,16 @@ public class ChordManager : MonoBehaviour
         chord.Root = root;
         chord.ChordName = chordName;
 
-        for(int i=0; i<chordData.Count; i++)
+        if (visible)
         {
-            Vector2 notePosition = Vector2.up * _musicPlatformGroup.GetRowHeight(chordData[i]);
-            NoteData note = Instantiate(_notePrefab, notePosition, Quaternion.identity, chordObject.transform).GetComponent<NoteData>();
-            note.transform.localPosition = new Vector2(0, note.transform.localPosition.y) ;
-            chord.NoteDatas.Add(note);
-            note.Note = chordData[i];
+            for (int i = 0; i < chordData.Count; i++)
+            {
+                Vector2 notePosition = Vector2.up * _musicPlatformGroup.GetRowHeight(chordData[i]);
+                NoteData note = Instantiate(_notePrefab, notePosition, Quaternion.identity, chordObject.transform).GetComponent<NoteData>();
+                note.transform.localPosition = new Vector2(0, note.transform.localPosition.y);
+                chord.NoteDatas.Add(note);
+                note.Note = chordData[i];
+            }
         }
 
         for (int i = 0; i < otherNotes.Count; i++)

@@ -11,7 +11,11 @@ using System.IO;
 public class MusicManager : MonoBehaviour
 {
     [SerializeField] private ChordManager _chordManager;
+    public string songName;
     public float bpm = 100;
+    public AudioSource songSource;
+    
+
     // bps = bpm/60f. 
     public struct BeatData
     {
@@ -32,11 +36,14 @@ public class MusicManager : MonoBehaviour
     void Start()
     {
         MusicPlatformGroup notes = MusicPlatformGroup.Instance;
-        encodedSong = Resources.Load<TextAsset>("SongFiles/encoded_song_16");
+        encodedSong = Resources.Load<TextAsset>($"SongFiles/{songName}");
         BeatDatas = ParseSong(encodedSong);
 
-        if(_chordManager != null)
+        if (_chordManager != null)
+        {
             _chordManager.CreateSong(BeatDatas);
+            _chordManager.CreateSong(BeatDatas);
+        }
     }
 
     // Update is called once per frame
@@ -108,11 +115,11 @@ public class MusicManager : MonoBehaviour
                 }
             }
             beat.chordNotes = chord;
-
+            
             arrayStart = line.IndexOf('[', arrayEnd);
             arrayEnd = line.IndexOf(']', arrayStart);
             List<int> otherNotes = new List<int>();
-
+            /*
             if (arrayEnd - arrayStart >= 2)
             {
                 arrayStart++;   // so first char is not [
@@ -124,10 +131,16 @@ public class MusicManager : MonoBehaviour
                     otherNotes.Add(val);
                 }
             }
-
+            */
             beat.otherNotes = otherNotes;
             songData.Add(beat);
         }
         return songData;
+    }
+
+    public void StartSong()
+    {
+        if (!songSource.isPlaying)
+            songSource.Play();
     }
 }

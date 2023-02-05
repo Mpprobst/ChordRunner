@@ -26,17 +26,18 @@ public class ChordCollision : MonoBehaviour
 
     void OnTriggerEnter2D(Collider2D collision)
     {
+        GameObject.FindObjectOfType<MusicManager>().StartSong();
         Debug.Log("collided with " + collision.gameObject.name);
         if (_musicPlatformGroup == null)
             _musicPlatformGroup = MusicPlatformGroup.Instance;
 
-        foreach(NoteData noteData in NoteDatas)
-            _musicPlatformGroup.PlayNote(noteData.Note);
+        //foreach(NoteData noteData in NoteDatas)
+        //    _musicPlatformGroup.PlayNote(noteData.Note);
 
 
         float rootPos = -10;
         float playerPos = collision.gameObject.transform.position.y;
-        if (Root >= 0)
+        if (Root >= 0 && NoteDatas.Count > 0)
             rootPos = NoteDatas[Root].transform.position.y;
         else
             Debug.Log("Root is out of range");
