@@ -3857,6 +3857,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2067981242}
   - component: {fileID: 2067981243}
+  - component: {fileID: 2067981244}
   m_Layer: 0
   m_Name: BouncyBottom
   m_TagString: Untagged
@@ -3929,3 +3930,16 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!114 &2067981244
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2067981241}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 71334533d9e23714f9b825c533b169cd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _musicManager: {fileID: 315548090}

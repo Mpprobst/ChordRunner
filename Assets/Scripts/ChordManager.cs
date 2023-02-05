@@ -74,8 +74,6 @@ public class ChordManager : MonoBehaviour
                 _currentBeat += 1;
                 MusicManager.BeatData chordData = chordList[i];
 
-                Debug.Log(chordData.played);
-
                 if (!chordData.played)
                     continue;
 
