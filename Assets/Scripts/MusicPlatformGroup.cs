@@ -32,6 +32,10 @@ public class MusicPlatformGroup : MonoBehaviour
         foreach (var r in rows)
             if (r.midiVal == midi)
                 return r.transform.position.y;
+        foreach (var r in rows)
+            if (r.midiVal == midi - 1)
+                return r.transform.position.y;
+        Debug.Log("Failed to find: " + midi);
         return 0f;
         /*int n = note[0] - 'A';
         int octave = note[1] - '0';

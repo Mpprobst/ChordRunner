@@ -55,7 +55,6 @@ public class MusicManager : MonoBehaviour
         if (_chordManager != null)
         {
             _chordManager.CreateSong(BeatDatas);
-            _chordManager.CreateSong(BeatDatas);
         }
 
     }
@@ -165,9 +164,10 @@ public class MusicManager : MonoBehaviour
         for (int l = 0; l < fLines.Length; l++)
         {
             string line = fLines[l];
-            if (line.Length < 16) continue;
+            //if (line.Length < 16) continue;
             BeatData beat = new BeatData();
             beat.played = line[0] - '0' == 1;
+            Debug.Log(beat.played);
 
             beat.chord = line.Substring(2, 2);
 
@@ -200,7 +200,7 @@ public class MusicManager : MonoBehaviour
             arrayStart = line.IndexOf('[', arrayEnd);
             arrayEnd = line.IndexOf(']', arrayStart);
             List<int> otherNotes = new List<int>();
-            /*
+            
             if (arrayEnd - arrayStart >= 2)
             {
                 arrayStart++;   // so first char is not [
@@ -209,10 +209,20 @@ public class MusicManager : MonoBehaviour
                 for (int i = 0; i < chordArray.Length; i++)
                 {
                     int val = int.Parse(chordArray[i].Trim());
+
+                    //normalizing midi value to fall within a one octave range
+                    while (val < 50)
+                    {
+                        val += 12;
+                    }
+                    while (val > 67)
+                    {
+                        val -= 12;
+                    }
                     otherNotes.Add(val);
                 }
             }
-            */
+            
             beat.otherNotes = otherNotes;
             songData.Add(beat);
         }
@@ -222,6 +232,9 @@ public class MusicManager : MonoBehaviour
     public void StartSong()
     {
         if (!songSource.isPlaying)
+        {
             songSource.Play();
+            Debug.Log("PLAyING");
+        }
     }
 }
