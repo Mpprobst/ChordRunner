@@ -860,7 +860,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _chordManager: {fileID: 941745985}
   songName: hint_manual_encode
-  bpm: 137
+  bpm: 100
   songSource: {fileID: 555095746}
 --- !u!4 &315548091
 Transform:
@@ -1179,7 +1179,7 @@ AudioSource:
   m_Enabled: 1
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
-  m_audioClip: {fileID: 8300000, guid: c813ddd44ed74c340b76a2faed536078, type: 3}
+  m_audioClip: {fileID: 8300000, guid: a0db288f2a776714d9445ddc92b02cf0, type: 3}
   m_PlayOnAwake: 0
   m_Volume: 1
   m_Pitch: 1
