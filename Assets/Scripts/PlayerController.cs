@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public class PlayerController : MonoBehaviour
 {
@@ -11,11 +12,14 @@ public class PlayerController : MonoBehaviour
     public float baseHealth = 100;
     public float healthDrainPerSec = 10f;
     public float healAmount = 20f;
+    [SerializeField] private Slider _playerHealthSlider;
 
     private float health;
     private int comboCount;
     private CircleCollider2D playerCollider;
     private Rigidbody2D rb;
+    public float TargetHeight = 0;
+    private Vector3 refVel = Vector3.zero;
 
     // Start is called before the first frame update
     void Start()
@@ -42,6 +46,8 @@ public class PlayerController : MonoBehaviour
             // TODO: move smoothly to the next line
         }
 
+        rb.MovePosition(Vector3.SmoothDamp(rb.position, new Vector3(rb.position.x, TargetHeight, rb.position.y), ref refVel, 0.05f));
+
         //check if player has ran out of health
         if (health <= 0)
         {
@@ -52,16 +58,15 @@ public class PlayerController : MonoBehaviour
 
     private void FixedUpdate()
     {
-        subractHealth(Time.deltaTime * healthDrainPerSec);
+        SubtractHealth(Time.deltaTime * healthDrainPerSec);
     }
 
     private void MoveHeight(int direction)
     {
-        int row = MusicPlatformGroup.Instance.GetRowIdx(currentNote) + direction;
-        float height = MusicPlatformGroup.Instance.rows[row].transform.position.y;
-        rb.MovePosition(new Vector3(-9, height, 0));
-        //transform.position = new Vector3(-9, height, 0); // TODO: move player to desired space on screen.
-        currentNote = MusicPlatformGroup.Instance.GetRowName(row);
+        MusicPlatformGroup musicPlatformGroup = MusicPlatformGroup.Instance;
+        int row = musicPlatformGroup.GetRowIdx(currentNote) + direction;
+        TargetHeight = musicPlatformGroup.rows[Mathf.Clamp(row, 0, musicPlatformGroup.rows.Length - 1)].transform.position.y;
+        currentNote = musicPlatformGroup.GetRowName(row);
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
@@ -69,17 +74,20 @@ public class PlayerController : MonoBehaviour
         //if the player travels through right note, add health
         if (collision.gameObject.tag == noteTag)
         {
-            addHealth(healAmount);
+            AddHealth(healAmount);
         }
     }
 
-    private void subractHealth(float amount)
+    public void SubtractHealth(float amount)
     {
         health -= amount;
+        _playerHealthSlider.value = health;
     }
-    private void addHealth(float amount)
+    public void AddHealth(float amount)
     {
         health += amount;
+        health = Mathf.Clamp(health, 0, 110);
+        _playerHealthSlider.value = health;
     }
 
     private void die()
