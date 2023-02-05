@@ -39,11 +39,11 @@ public class ChordCollision : MonoBehaviour
         float playerPos = collision.gameObject.transform.position.y;
         if (Root >= 0 && NoteDatas.Count > 0)
             rootPos = NoteDatas[Root].transform.position.y;
-        else
-            Debug.Log("Root is out of range");
+        //else
+            //Debug.Log("Root is out of range");
         if (Mathf.Abs(rootPos - playerPos) < Mathf.Epsilon)
         {
-            Debug.Log("hit player");
+            //Debug.Log("hit player");
         }
     }
 
