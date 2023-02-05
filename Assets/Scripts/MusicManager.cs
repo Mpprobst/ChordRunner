@@ -10,11 +10,24 @@ using System.IO;
 /// </summary>
 public class MusicManager : MonoBehaviour
 {
+    [System.Serializable]
+    public struct DrumBeat
+    {
+        public List<bool> drumSounds;
+    }
     [SerializeField] private ChordManager _chordManager;
     public string songName;
     public float bpm = 100;
-    public AudioSource songSource;
-    
+    public AudioSource songSource, hiHat, snare, drumKick;
+    [SerializeField] private DrumBeat[] drumPattern; // should be 16
+
+    private float _beatInterval, _beatTimer;
+    private int _beatCountFull, measureCount;
+    private bool _beatFull;
+
+    private bool doPulse;
+    public float _pulseInterval, _pulseTimer, _pulseStart, _pulseEnd, _pulseDirection;
+    public Material[] gradientMats;
 
     // bps = bpm/60f. 
     public struct BeatData
@@ -43,13 +56,81 @@ public class MusicManager : MonoBehaviour
         {
             _chordManager.CreateSong(BeatDatas);
         }
+
     }
 
     // Update is called once per frame
     void Update()
     {
+        BeatDetection();
+        Pulse();
+    }
+
+    private void Pulse()
+    {
+        _pulseTimer += Time.deltaTime * _pulseDirection;
+
+        if (_pulseTimer >= _pulseInterval)
+            _pulseDirection = -1;
+        else if (_pulseTimer <= 0)
+        {
+            _pulseDirection = 1;
+            if (_pulseEnd == 0)
+                _pulseEnd = 0.6f;
+        }
+
+
+        float amount = Mathf.Lerp(_pulseStart, _pulseEnd, _pulseTimer / _pulseInterval);
+        //Debug.Log($"Pulse: {_pulseTimer} dir: {_pulseDirection} interval: {_pulseInterval} = amount {amount}");
+
+        foreach (var mat in gradientMats)
+            mat.SetFloat("_GradientAmount", amount);
 
     }
+
+    private void BeatDetection()
+    {
+        _beatFull = false;
+        _beatInterval = 30f / bpm;
+        _beatTimer += Time.deltaTime;
+        if (_beatTimer >= _beatInterval)
+        {
+            if (_beatCountFull % 4 == 0)
+            {
+                _pulseInterval = _beatInterval / 4f;
+                _pulseDirection = 1;
+                _pulseTimer = 0;
+                _pulseEnd = 0;
+                doPulse = true;
+                drumKick.Play();
+            }
+            else if (_beatCountFull % 4 == 1)
+            {
+                //_pulseInterval = _beatInterval / 8f;
+                _pulseEnd = 0.6f;
+            }
+
+            /*if (drumPattern[_beatCountFull].drumSounds[0])
+                drumKick.Play();
+            if (drumPattern[_beatCountFull].drumSounds[1])
+                hiHat.Play();
+            if (drumPattern[_beatCountFull].drumSounds[2])
+                snare.Play();
+            */
+            _beatTimer -= _beatInterval;
+            _beatFull = true;
+            _beatCountFull++;
+
+            if (_beatCountFull > 15)
+            {
+                _beatCountFull = 0;
+                measureCount++;
+                if (measureCount % 4 == 0)
+                    ParseSong(encodedSong);
+            }
+        }
+    }
+
 
     /// <summary>
     /// 

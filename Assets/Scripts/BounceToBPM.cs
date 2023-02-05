@@ -19,6 +19,6 @@ public class BounceToBPM : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        _renderer.sharedMaterial.SetFloat("_GradientAmount", 0.5f + (Mathf.Sin(Time.time * _musicManager.bpm / 30f) / 2));
+        _renderer.sharedMaterial.SetFloat("_GradientAmount", 0.5f + (Mathf.Sin(Time.time * _musicManager.bpm / 15f) / 2));
     }
 }
