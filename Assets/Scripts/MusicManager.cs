@@ -42,7 +42,6 @@ public class MusicManager : MonoBehaviour
         if (_chordManager != null)
         {
             _chordManager.CreateSong(BeatDatas);
-            _chordManager.CreateSong(BeatDatas);
         }
     }
 

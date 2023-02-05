@@ -37,7 +37,7 @@ public class ChordManager : MonoBehaviour
         transform.localPosition -= new Vector3(Time.deltaTime * noteMovementSpeed, 0);
         foreach(ChordCollision chord in chordObjects)
         {
-            chord.SetDissolveValue(1);
+            chord.SetDissolveValue(Mathf.Clamp(-(chord.transform.position.x / 6), 0, 1));
         }
     }
 
